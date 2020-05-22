@@ -1,0 +1,34 @@
+.recipe-wrapper {
+    max-width: 500px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+h2 {
+    margin: 0 0 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-control {
+    width: 100%;
+    box-shadow: none;
+    padding: 10px 15px;
+    border-radius: 0;
+    font-size: 14px;
+}
+
+.btn-primary {
+    box-shadow: none;
+    padding: 12px 15px;
+    font-size: 16px;
+    background: #029e02;
+    color: #fff;
+    border: 0;
+}
+
+.btn-primary:hover {
+    background: #008000;
+}
