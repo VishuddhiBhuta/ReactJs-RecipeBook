@@ -9,10 +9,10 @@ export default class Recipe extends React.Component {
                 recipeText: "asdsad",
                 ingredient: [
                     {
-                        ingredientText: "asdhas"
+                        ingredientText: "abcsds"
                     },
                     {
-                        ingredientText: "hsdkjf"
+                        ingredientText: "fgrerkj"
                     }
                 ]
             }
@@ -20,8 +20,8 @@ export default class Recipe extends React.Component {
         recipeText: '',
         ingredientText: "",
         moreIngredients: "",
-        editedtext: "",
-        isEditable: false
+        editIndex: -1,
+        editedText: ""
     }
 
     inputHandleChange = (event) => {
@@ -77,61 +77,59 @@ export default class Recipe extends React.Component {
 
         let newLists = [...this.state.recipesList];
         let filterLists = {
-            ingredient: [
-                {
-                    ingredientText: filterItems
-                }
-            ]
+            ingredient: filterItems
         }
 
-        console.log(filterLists.ingredient)
-
-        newLists[removeParentIndex].ingredient = filterLists.ingredient[removeIndex].ingredientText
+        newLists[removeParentIndex].ingredient = filterLists.ingredient
 
         this.setState({
             recipesList: newLists
         });
-
-        console.log(newLists[removeParentIndex].ingredient)
     }
 
-    addItem = (parentIndex, addIndex) => {
+    addItem = (parentIndex, moreIngredients) => {
 
-        if (this.state.moreIngredients.length === 0) return
+        if (moreIngredients.length === 0) return
 
+        // copy elements
         let newArr = [...this.state.recipesList]
+        let currentRecipe = newArr[parentIndex]
 
-        let splittedValues = this.state.moreIngredients.split(",")
+        let splittedValues = moreIngredients.split(",")
 
-        let indList = [...this.state.recipesList[parentIndex].ingredient]
-
+        // copy existing ingt
+        let inglist = [...currentRecipe.ingredient]
         splittedValues.forEach((value) => {
-            indList.push({
+            inglist.push({
                 ingredientText: value
             })
         })
 
-        let newObj = {
-            ingredient: [...indList]
+        let object = {
+            ...currentRecipe,
+            ingredient: inglist
         }
-
-        newArr[parentIndex].ingredient = newObj.ingredient
+        newArr.splice(parentIndex, 1, object)
 
         this.setState({
             recipesList: newArr,
-            moreIngredients: ""
         });
 
-        console.log(newArr)
-
     }
 
-    editItem = (editIndex) => {
-        console.log(editIndex)
-        this.setState({
-            isEditable: !this.state.isEditable,
-        })
-    }
+    // editItem = (parentIndex, editIngIndex) => {
+    //     if (this.state.editIndex > -1) {
+
+    //     } else {
+    //         this.setState({
+    //             editIndex: editIngIndex,
+    //             editedText: this.state.recipesList[parentIndex].ingredient[editIngIndex].ingredientText
+    //         });
+
+    //         console.log(this.state.recipesList[parentIndex].ingredient[editIngIndex].ingredientText)
+    //     }
+
+    // }
 
     render() {
         return (
@@ -144,17 +142,19 @@ export default class Recipe extends React.Component {
                     <input type="text" className="form-control" name="ingredientText" onChange={this.inputHandleChange} value={this.state.ingredientText} placeholder="Enter ingredients name seperated with commas" />
                 </div>
                 <button className="btn-primary" onClick={() => { this.addRecipe() }}>Add Recipe</button>
-                <RecipeBlock
-                    recipesList={this.state.recipesList}
-                    removeRecipe={this.removeRecipe}
-                    removeItem={this.removeItem}
-                    inputHandleChange={this.inputHandleChange}
-                    moreIngredients={this.state.moreIngredients}
-                    addItem={this.addItem}
-                    editedtext={this.state.editedtext}
-                    editItem={this.editItem}
-                    isEditable={this.state.isEditable} />
-
+                {this.state.recipesList.map((recipe, index) => {
+                    return (
+                        <RecipeBlock
+                            recipe={recipe}
+                            removeRecipe={this.removeRecipe}
+                            editIngredient={this.editItem}
+                            addIngredient={this.addItem}
+                            removeIngredient={this.removeItem}
+                            key={index}
+                            parentIndex={index}
+                            editedText={this.state.editedText} />
+                    )
+                })}
             </div>
         )
     }
