@@ -6,10 +6,13 @@ export default class IngredientBlock extends React.Component {
     state = {
         isEditable: false,
         editedText: "",
-        editIndex: -1
+        editIndex: -1,
+        // recipesList: this.props.recipesList
     }
 
-    editIngredient = (editIngIndex) => {
+    editIngredient = (pIndex, editIngIndex) => {
+
+        console.log(this.props.recipesList)
 
         let { parentIndex, recipe } = this.props
 
@@ -17,32 +20,43 @@ export default class IngredientBlock extends React.Component {
             //SaveMode
 
             // copy elements
-            let newList = [recipe]
-            let newArr = [...newList]
-            let currentRecipe = newArr[parentIndex]
+            // let newArr = [...this.props.recipesList]
+            // let currentRecipe = newArr[parentIndex]
+
+            // console.log("Current Array", newArr, "Current Index", parentIndex, "Current Recipe", currentRecipe.ingredient)
 
             // copy existing ingt
-            let inglist = [...currentRecipe.ingredient]
+            let inglist = [...recipe.ingredient]
+
+            console.log("New ing LIst", inglist)
 
             let newingList = {
+                ...inglist,
                 ingredientText: this.state.editedText
             }
 
+            console.log("New updated Text", newingList)
+
             inglist[editIngIndex] = newingList
 
-            let object = {
-                ...currentRecipe,
+            let newRecipe = {
+                ...recipe,
                 ingredient: inglist
             }
 
-            newArr.splice(parentIndex, 1, object)
+            console.log("Updated Recipe", newRecipe)
+
+            //recipe.splice(parentIndex, 1, newRecipe)
 
             this.setState({
                 editIndex: -1,
-                //recipesList: [],
+                // recipesList: newArr
             });
 
-            console.log(newArr)
+            this.props.updateRecipeList(parentIndex, newRecipe)
+
+            // console.log("Old Array", this.props.recipesList)
+            console.log("New Edited Array", recipe)
 
         } else {
             //Edit Mode
@@ -50,12 +64,10 @@ export default class IngredientBlock extends React.Component {
                 editIndex: editIngIndex,
                 editedText: this.props.ingredients.ingredientText
             })
-            // console.log(this.state.editIndex)
         }
     }
 
     editHandleChange = (event) => {
-        console.log(event.target.value)
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -63,7 +75,7 @@ export default class IngredientBlock extends React.Component {
 
     render = () => {
 
-        let { ingredients, index, parentIndex, removeIngredient, editIngredient, editedText } = this.props
+        let { ingredients, index, parentIndex, removeIngredient, editedText } = this.props
 
         return (
             <li>

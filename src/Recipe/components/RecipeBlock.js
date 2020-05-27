@@ -13,7 +13,7 @@ export default class RecipeBlock extends React.Component {
     }
 
     render() {
-        let { recipe, parentIndex, removeRecipe, addIngredient, removeIngredient, editIngredient, editedText } = this.props
+        let { recipe, parentIndex, removeRecipe, addIngredient, removeIngredient, recipesList, updateRecipeList } = this.props
 
         return (
             <div className="recipe-details">
@@ -30,8 +30,8 @@ export default class RecipeBlock extends React.Component {
                                     key={index}
                                     parentIndex={parentIndex}
                                     removeIngredient={removeIngredient}
-                                    editIngredient={editIngredient}
-                                    editedText={editedText} />
+                                    recipesList={recipesList}
+                                    updateRecipeList={updateRecipeList} />
                             )
                         })
                     }

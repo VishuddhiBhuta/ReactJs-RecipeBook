@@ -20,8 +20,6 @@ export default class Recipe extends React.Component {
         recipeText: '',
         ingredientText: "",
         moreIngredients: "",
-        editIndex: -1,
-        editedText: ""
     }
 
     inputHandleChange = (event) => {
@@ -95,6 +93,8 @@ export default class Recipe extends React.Component {
         let newArr = [...this.state.recipesList]
         let currentRecipe = newArr[parentIndex]
 
+        console.log(newArr[parentIndex])
+
         let splittedValues = moreIngredients.split(",")
 
         // copy existing ingt
@@ -117,19 +117,14 @@ export default class Recipe extends React.Component {
 
     }
 
-    // editItem = (parentIndex, editIngIndex) => {
-    //     if (this.state.editIndex > -1) {
+    updateRecipeList = (updatedIndex, updatedRecipe) => {
+        let updatedArr = [...this.state.recipesList]
+        updatedArr.splice(updatedIndex, 1, updatedRecipe)
+        this.setState({
+            recipesList: updatedArr
+        })
+    }
 
-    //     } else {
-    //         this.setState({
-    //             editIndex: editIngIndex,
-    //             editedText: this.state.recipesList[parentIndex].ingredient[editIngIndex].ingredientText
-    //         });
-
-    //         console.log(this.state.recipesList[parentIndex].ingredient[editIngIndex].ingredientText)
-    //     }
-
-    // }
 
     render() {
         return (
@@ -147,12 +142,12 @@ export default class Recipe extends React.Component {
                         <RecipeBlock
                             recipe={recipe}
                             removeRecipe={this.removeRecipe}
-                            editIngredient={this.editItem}
                             addIngredient={this.addItem}
                             removeIngredient={this.removeItem}
                             key={index}
                             parentIndex={index}
-                            editedText={this.state.editedText} />
+                            recipesList={this.state.recipesList}
+                            updateRecipeList={this.updateRecipeList} />
                     )
                 })}
             </div>
